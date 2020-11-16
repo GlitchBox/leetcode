@@ -1,5 +1,12 @@
-# Write your MySQL query statement below
+#a litte slower sql, this uses outer join in the first place and then selects from the table
 Select p.project_id, round(avg(e.experience_years),2) as average_years
 from Project as p, Employee as e
 where p.employee_id = e.employee_id
 group by p.project_id
+
+#faster sql, this doesn't require outer joining like the solution above. It only selects the rows that have matching conditions in both tables
+Select Project.project_id, round(avg(Employee.experience_years),2) as average_years
+from Project inner join Employee 
+on Project.employee_id = Employee.employee_id
+group by Project.project_id
+
