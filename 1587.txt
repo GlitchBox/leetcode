@@ -1,0 +1,6 @@
+select Users.name, sum(Transactions.amount) as balance
+from Transactions 
+inner join Users
+on Transactions.account = Users.account
+group by Transactions.account
+having sum(Transactions.amount) > 10000
