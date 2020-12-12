@@ -1,0 +1,5 @@
+# Write your MySQL query statement below
+select distCourses.class
+from ( select distinct student, class from courses) distCourses
+group by distCourses.class
+having count(*) >= 5
