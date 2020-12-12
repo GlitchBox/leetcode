@@ -1,0 +1,16 @@
+# Write your MySQL query statement below
+#this query can be generalized to give nth largest Salary
+select (
+    select distinct Salary
+    from Employee 
+    order by Salary desc
+    limit 1 offset 1
+) as SecondHighestSalary
+
+#this also works but doesn't generalize like the above one
+# Write your MySQL query statement below
+select max(Salary) as SecondHighestSalary
+from 
+Employee where Salary < (
+select max(salary) from Employee
+    ) 
