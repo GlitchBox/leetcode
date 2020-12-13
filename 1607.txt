@@ -1,0 +1,10 @@
+select seller_name
+from Seller
+where seller_id not in (
+                        select distinct Orders.seller_id
+                        from Orders
+                        inner join Seller
+                        on Orders.seller_id = Seller.seller_id
+                        where Orders.sale_date >= '2020-01-01'
+                        )
+order by seller_name

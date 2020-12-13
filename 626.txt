@@ -1,0 +1,16 @@
+select  
+    (case
+        when mod(id,2) = 1 and id != counts then id+1 #when id is odd and not the last id, return the next id
+        when mod(id,2) = 1 and id = counts then id #when id is odd and last id, return id
+        else id-1	#when id is even, return the previous id
+    end) as id, student
+from seat, (select count(*) as counts
+            from seat
+           ) as seat_counts
+order by id
+
+#better implementation which uses coalesce. coalesce returns the first non null value from a list
+select s1.id, coalesce(s2.student, s1.student) as student
+from seat s1
+left join seat s2
+on s1.id = (s2.id+1)^1-1
