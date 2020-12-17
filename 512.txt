@@ -1,0 +1,8 @@
+# Write your MySQL query statement below
+select distinct Activity.player_id , Activity.device_id 
+from Activity
+join ( select player_id, min(event_date) as firstEvent
+       from Activity
+       group by player_id
+) firstDates
+on Activity.player_id = firstDates.player_id and Activity.event_date = firstDates.firstEvent
