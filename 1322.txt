@@ -1,0 +1,44 @@
+# Write your MySQL query statement below
+
+select distinct Ads.ad_id,
+
+case 
+    when ifnull(clickTable.clicked, 0) + ifnull(viewTable.viewed,0) > 0 then ROUND( ifnull(clickTable.clicked,0)/(ifnull(clickTable.clicked,0)+ifnull(viewTable.viewed, 0))*100, 2)
+    else 0
+end as ctr
+
+from ( ( Ads left join 
+    ( select ad_id, count(*) as clicked
+    from Ads
+    where action = 'Clicked'
+    group by ad_id ) clickTable 
+    
+    on Ads.ad_id = clickTable.ad_id )
+    
+    left join
+    
+    (select ad_id, count(*)as viewed
+    from Ads
+    where action = 'Viewed'
+    group by ad_id) viewTable
+    
+    on Ads.ad_id = viewTable.ad_id )
+
+order by ctr desc, ad_id asc
+
+###the following solution doesn't require any subqueries and joins
+# Write your MySQL query statement below
+#NOTE: avg doesn't consider NULL values
+
+select ad_id, ifnull( round( avg(
+                                    case
+                                        when action = 'Clicked' then 1
+                                        when action = 'viewed' then 0
+                                        else NULL
+                                    end 
+                                )*100
+                        ,2)
+                    ,0) as ctr
+from Ads
+group by ad_id
+order by ctr desc, ad_id asc
